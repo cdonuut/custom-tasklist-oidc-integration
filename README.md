@@ -7,8 +7,8 @@ This project is a custom tasklist application that integrates with Camunda Taskl
 - **Java 11 or higher** installed
 - **Maven** installed
 - **Spring Boot** compatible IDE (e.g., IntelliJ IDEA)
-- A **Camunda Tasklist** and **OIDC provider** (e.g., Azure AD)
 
+  
 ## Getting Started
 
 ### 1. Clone the repository
