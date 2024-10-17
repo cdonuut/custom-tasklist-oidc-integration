@@ -1,0 +1,42 @@
+HELP.md
+
+# Target directory (Maven build outputs)
+target/
+
+# Maven Wrapper files
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/
+
+# IntelliJ IDEA project files
+.idea/
+*.iws
+*.iml
+*.ipr
+
+# IntelliJ's workspace and project settings files (optional)
+.idea/*
+
+# Exclude application.properties
+src/main/resources/application.properties
+
+# Spring Tools Suite (STS)
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# VS Code settings
+.vscode/
