@@ -19,11 +19,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for simplicity
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().authenticated()  // Ensure all requests are authenticated
+                        .requestMatchers("/camunda7/**").authenticated() // Require OIDC authentication for Camunda 7 endpoints
+                        .requestMatchers("/camunda8/**").authenticated() // Require OIDC authentication for Camunda 8 endpoints
+                        .anyRequest().authenticated() // Require authentication for all other endpoints
                 )
-                .oauth2Login();  // Enable OAuth 2.0 login
+                .oauth2Login(); // Enable OAuth 2.0 login
         return http.build();
     }
 }

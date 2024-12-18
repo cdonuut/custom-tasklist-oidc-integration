@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Unified Tasklist</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        /* Main container layout */
+        .container {
+            display: flex;
+            justify-content: flex-start;
+            align-items: flex-start;
+            margin-top: 20px;
+        }
+
+        /* Actions Table */
+        .actions-table {
+            flex: 0 0 10%; /* Fixed width of approximately 10% of the parent container */
+            margin-right: 20px; /* Space between actions and task table */
+            border-collapse: collapse;
+        }
+
+        .actions-table th, .actions-table td {
+            text-align: center;
+            padding: 8px;
+        }
+
+        .actions-table th {
+            background-color: #f2f2f2;
+        }
+
+        button {
+            background-color: #00549E;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #003b6b;
+        }
+
+        /* Task Table */
+        .task-table {
+            flex: 1; /* Take the remaining space */
+            border-collapse: collapse;
+            width: 80%;
+        }
+
+        .task-table th, .task-table td {
+            border: 1px solid #ddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        .task-table th {
+            background-color: #f2f2f2;
+        }
+
+        .task-table tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+<h1>Unified Tasklist</h1>
+
+<div class="container">
+    <table class="actions-table">
+        <thead>
+        <tr>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><button onclick="fetchUnifiedTasks()">Get All Tasks</button></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table id="task-table" class="task-table">
+        <thead>
+        <tr>
+            <th>User Task Name</th>
+            <th>Id</th>
+            <th>Source</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Rows will be dynamically added here -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function fetchUnifiedTasks() {
+        fetch('/unified-tasks')
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('task-table').querySelector('tbody');
+                tableBody.innerHTML = ''; // Clear previous rows
+
+                if (data.message) {
+                    // Display the "no tasks" message
+                    alert(data.message);
+                } else {
+                    // Populate the table with tasks
+                    data.forEach(task => {
+                        const row = document.createElement('tr');
+
+                        const nameCell = document.createElement('td');
+                        nameCell.textContent = task.name;
+
+                        const idCell = document.createElement('td');
+                        idCell.textContent = task.id;
+
+                        const sourceCell = document.createElement('td');
+                        sourceCell.textContent = task.source || "Unknown";
+
+                        const actionsCell = document.createElement('td');
+                        const completeButton = document.createElement('button');
+                        completeButton.textContent = 'Complete Task';
+                        completeButton.onclick = () => completeTask(task.id);
+
+                        actionsCell.appendChild(completeButton);
+
+                        row.appendChild(nameCell);
+                        row.appendChild(idCell);
+                        row.appendChild(sourceCell);
+                        row.appendChild(actionsCell);
+
+                        tableBody.appendChild(row);
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Error fetching tasks:", error);
+                alert("Failed to fetch tasks. Please try again.");
+            });
+    }
+
+    function completeTask(taskId) {
+        // Directly send a request to complete the task without variables
+        fetch('/complete-task', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ taskId }) // No variables passed
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert(`Task ${taskId} completed successfully!`);
+                    fetchUnifiedTasks(); // Refresh the task list
+                } else {
+                    response.text().then(text => alert(`Error completing task: ${text}`));
+                }
+            })
+            .catch(error => alert(`Error: ${error.message}`));
+    }
+</script>
+</body>
+</html>
