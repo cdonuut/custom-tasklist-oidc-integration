@@ -48,6 +48,11 @@ spring.security.oauth2.client.registration.custom.redirect-uri=http://localhost:
 
 # OIDC Provider (e.g., Azure AD)
 spring.security.oauth2.client.provider.custom.issuer-uri=YOUR_OIDC_ISSUER_URI
+
+# If you want to use the unified tasklist of Camunda 7 as well, include the variables (example of local setup):
+camunda7.base.url=http://localhost:8080/
+camunda7.username=demo
+camunda7.password=demo
 ```
 
 Replace the placeholders (e.g., `YOUR_CAMUNDA_CLIENT_ID`, `YOUR_OIDC_CLIENT_ID`) with your actual values.
